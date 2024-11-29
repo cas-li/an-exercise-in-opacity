@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>an exercise in opacity</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      overflow: hidden;
+      height: 100vh;
+      cursor: none;
+      font-family: 'Garamond', serif;
+      color: white;
+      line-height: 1.8;
+    }
+
+    .title {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .text-container {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 900px;
+      color: white;
+      visibility: hidden;
+      clip-path: inset(0 0 100% 100%);
+      -webkit-clip-path: inset(0 0 100% 100%);
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .text-container.visible {
+      visibility: visible !important;
+      clip-path: none !important;
+      -webkit-clip-path: none !important;
+    }
+
+    .text-container p {
+      text-align: justify;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 0;
+    }
+
+    .paragraph-spacing {
+      margin-bottom: 30px;
+    }
+
+    .indented {
+      text-indent: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">an exercise in opacity</div>
+  <div class="text-container" id="textContainer">
+    <p class="paragraph-spacing">
+        awaken. peel your lids open and squint as the blinding eastern sun filters through. reluctantly lift a hand to rub the crud off your eyes to
+    </p>
+    <p class="paragraph-spacing indented">
+        realize that you can’t see yourself. wave your hand about in panic to no change in your field of vision, collapsing onto your face as you grasp the contours of your nose, lips, brow ridge—exhale in relief, the topology familiar and your materiality reaffirmed. toss your covers to the side as you take in the spectacle of lack that greets you—where the gentle mounds of your chest, stubborn prominence of ribs, etc. once were are belied by the flatness of the flannel sheet below. as you heave yourself up to a sitting position, throw a probing arm out towards your nightstand and
+    </p>
+    <p class="paragraph-spacing indented">
+        send a fork flying across the room as you realize your mother has left you cut fruit before leaving for work. watch as the sliced pears levitate up and face-wards, disappearing one by one with a satisfying crunch. satiated, get up and open your oak dresser before realizing of course that, while you are naked, no one can see you naked, and thus you eschew your daily attire (for what are clothes but to prevent others from seeing you naked?). at the top of the stairs, trip over nothing and find yourself airborne—
+    </p>
+    <p class="paragraph-spacing">
+      close your eyes, bracing for impact,
+    </p>
+    <p class="paragraph-spacing">
+        but it doesn’t come.      ...      ...     cautiously re-open:
+    </p>
+    <p>
+      <span class="trigger-text">   observe You, naked and corporeal, unconscious at the foot of the stairs.</span>
+    </p>
+    <p class="paragraph-spacing">
+        scream, but nothing comes out.
+    </p>
+  </div>
+
+  <script>
+    const textContainer = document.getElementById('textContainer');
+    const triggerText = document.querySelector('.trigger-text');
+    let revealEffectActive = true;
+
+    const revealFullText = () => {
+      textContainer.classList.add('visible');
+      revealEffectActive = false;
+      document.body.style.cursor = 'default';
+    };
+
+    const handleMouseMove = (e) => {
+      if (!revealEffectActive) return;
+
+      const revealWidth = 300;
+      const revealHeight = 40; 
+
+      const containerRect = textContainer.getBoundingClientRect();
+
+      const cursorX = e.clientX - containerRect.left;
+      const cursorY = e.clientY - containerRect.top;
+
+      const top = cursorY - revealHeight / 2;
+      const left = cursorX - revealWidth / 2;
+
+      textContainer.style.visibility = 'visible';
+      textContainer.style.clipPath = `inset(${top}px calc(100% - ${cursorX + revealWidth / 2}px) calc(100% - ${cursorY + revealHeight / 2}px) ${left}px round 15px)`;
+      textContainer.style.webkitClipPath = `inset(${top}px calc(100% - ${cursorX + revealWidth / 2}px) calc(100% - ${cursorY + revealHeight / 2}px) ${left}px round 15px)`;
+    };
+
+    triggerText.addEventListener('mouseenter', () => {
+      revealFullText(); 
+    });
+
+    document.body.addEventListener('mousemove', handleMouseMove);
+  </script>
+</body>
+</html>
